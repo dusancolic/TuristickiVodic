@@ -4,6 +4,7 @@ import org.apache.commons.codec.digest.DigestUtils;
 import rs.raf.entities.User;
 import rs.raf.entities.UserType;
 import rs.raf.repositories.MySqlAbstractRepository;
+import rs.raf.request.UserForChangeRequest;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -148,5 +149,45 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
         }
 
         return posts;
+    }
+
+    @Override
+    public User changeUserData(UserForChangeRequest userForChangeRequest) {
+        String email = userForChangeRequest.getOldEmail();
+        String newEmail = userForChangeRequest.getNewEmail();
+        String name = userForChangeRequest.getName();
+        String surname = userForChangeRequest.getSurname();
+        UserType userType = userForChangeRequest.getUserType();
+        User user = findUser(email);
+
+        if(user != null)
+        {
+            Connection connection = null;
+            PreparedStatement preparedStatement = null;
+            try {
+                connection = this.newConnection();
+
+                preparedStatement = connection.prepareStatement("UPDATE users SET name = ?, surname = ?, email = ?, user_type = ? WHERE email = ?");
+                preparedStatement.setString(1, name);
+                preparedStatement.setString(2, surname);
+                preparedStatement.setString(3, newEmail);
+                preparedStatement.setString(4, userType.toString());
+                preparedStatement.setString(5, email);
+                preparedStatement.executeUpdate();
+
+                user.setEmail(newEmail);
+                user.setName(name);
+                user.setSurname(surname);
+                user.setUserType(userType);
+
+
+            } catch (SQLException e) {
+                e.printStackTrace();
+            } finally {
+                this.closeStatement(preparedStatement);
+                this.closeConnection(connection);
+            }
+        }
+        return user;
     }
 }

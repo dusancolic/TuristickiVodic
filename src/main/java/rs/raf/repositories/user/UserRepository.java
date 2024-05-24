@@ -1,15 +1,17 @@
 package rs.raf.repositories.user;
 
 import rs.raf.entities.User;
+import rs.raf.request.UserForChangeRequest;
 
 import java.util.List;
 
 public interface UserRepository {
 
-    public User findUser(String email);
-    public User addUser(User user);
-    public User changeActivityForUser(String email);
-    public List<User> allUsers();
+    User findUser(String email);
+    User addUser(User user);
+    User changeActivityForUser(String email);
+    List<User> allUsers();
 
+    User changeUserData(UserForChangeRequest userForChangeRequest);
 
 }

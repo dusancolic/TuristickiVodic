@@ -1,13 +1,18 @@
 package rs.raf.request;
 
+import lombok.Getter;
+import lombok.Setter;
+
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 
+@Setter
+@Getter
 public class LoginRequest {
 
-    @NotNull(message = "Username is required")
-    @NotEmpty(message = "Username is required")
-    private String username;
+    @NotNull(message = "Email is required")
+    @NotEmpty(message = "Email is required")
+    private String email;
 
     @NotNull(message = "Password is required")
     @NotEmpty(message = "Password is required")
@@ -16,19 +21,4 @@ public class LoginRequest {
     public LoginRequest() {
     }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
-    }
 }

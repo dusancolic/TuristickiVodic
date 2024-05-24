@@ -5,8 +5,8 @@ import rs.raf.entities.Subject;
 import java.util.List;
 
 public interface SubjectRepository {
-    public Subject addSubject(Subject subject);
-    public List<Subject> allSubjects();
-    public Subject findSubject(Integer id);
-    public void deleteSubject(Integer id);
+    Subject addSubject(Subject subject);
+    List<Subject> allSubjects();
+    Subject findSubject(Integer id);
+    void deleteSubject(Integer id);
 }
