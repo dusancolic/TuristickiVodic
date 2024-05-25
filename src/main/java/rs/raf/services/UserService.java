@@ -15,7 +15,7 @@ import java.util.List;
 
 public class UserService {
     @Inject
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     public String login(String email, String password)
     {

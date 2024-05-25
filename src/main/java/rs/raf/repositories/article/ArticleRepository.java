@@ -7,7 +7,7 @@ import java.util.List;
 public interface ArticleRepository {
 
      Article addArticle(Article article);
-     Article findArticleWithId(Integer id);
+     Article findArticleWithId(Long id);
 
      List<Article> allArticles();
 }

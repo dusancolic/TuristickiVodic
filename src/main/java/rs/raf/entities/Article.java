@@ -19,6 +19,7 @@ public class Article {
 
     private Long id;
 
+    private Long destinationId;
     @NotNull(message = "Title field is required")
     @NotEmpty(message = "Title field is required")
     private String title;
@@ -31,7 +32,6 @@ public class Article {
     @NotEmpty(message = "Author field is required")
     private String author;
     private String date;
-    private Long destinationId;
     private int numberOfVisits = 0;
     private List<Long> activities = new ArrayList<>();
 

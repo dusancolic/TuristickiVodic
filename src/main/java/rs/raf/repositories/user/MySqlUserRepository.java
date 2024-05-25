@@ -119,7 +119,7 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
 
     @Override
     public List<User> allUsers() {
-        List<User> posts = new ArrayList<>();
+        List<User> users = new ArrayList<>();
 
         Connection connection = null;
         Statement statement = null;
@@ -130,7 +130,7 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
             statement = connection.createStatement();
             resultSet = statement.executeQuery("select * from users");
             while (resultSet.next()) {
-                posts.add(new User(resultSet.getLong("id"),
+                users.add(new User(resultSet.getLong("id"),
                         resultSet.getString("name"),
                         resultSet.getString("surname"),
                         resultSet.getString("email"),
@@ -148,7 +148,7 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
             this.closeConnection(connection);
         }
 
-        return posts;
+        return users;
     }
 
     @Override

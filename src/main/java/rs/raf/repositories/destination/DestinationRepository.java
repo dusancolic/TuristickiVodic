@@ -8,7 +8,7 @@ public interface DestinationRepository {
 
 
     Destination addDestination(Destination destination);
-    Destination findDestinationWithId(Integer id);
+    Destination findDestination(String name);
 
     List<Destination> allDestinations();
 }

@@ -8,7 +8,7 @@ public interface CommentRepository {
 
     Comment addComment(Comment comment);
 
-    List<Comment> findCommentWithId(Integer id);
+    Comment findCommentWithId(Long id);
 
     List<Comment> allComments();
 }

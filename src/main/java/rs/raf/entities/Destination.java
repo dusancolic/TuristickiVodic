@@ -18,7 +18,6 @@ public class Destination {
     private Long id;
     @NotNull(message = "Name field is required")
     @NotEmpty(message = "Name field is required")
-    @UniqueElements(message = "Name already exists")
     private String name;
 
     @NotNull(message = "Description field is required")

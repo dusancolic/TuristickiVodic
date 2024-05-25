@@ -16,7 +16,7 @@ import javax.validation.constraints.NotNull;
 public class Comment {
     private Long id;
 
-    private Long ArticleId;
+    private Long articleId;
 
     @NotNull(message = "Text field is required")
     @NotEmpty(message = "Text field is required")
