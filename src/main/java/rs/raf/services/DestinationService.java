@@ -24,4 +24,12 @@ public class DestinationService {
             return this.destinationRepository.addDestination(destination);
         }
 
+        public String removeDestination(Destination destination) {
+            return this.destinationRepository.removeDestination(destination);
+        }
+
+        public Destination updateDestination(Destination destination) {
+            return this.destinationRepository.updateDestination(destination);
+        }
+
 }

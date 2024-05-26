@@ -38,4 +38,21 @@ public class DestinationResource {
 
         return Response.ok(this.destinationService.addDestination(destination)).build();
     }
+
+    @DELETE
+    @Path("/{name}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response remove(@PathParam("name") String name) {
+        Destination destination = destinationService.findDestination(name);
+        if(destinationService.findDestination(name) == null){
+            return Response.status(422, "Unprocessable Entity").entity("Destination with this name does not exist").build();
+        }
+        return Response.ok(destinationService.removeDestination(destination)).build();
+    }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response update(@Valid Destination destination) {
+        return Response.ok(this.destinationService.updateDestination(destination)).build();
+    }
 }

@@ -26,4 +26,20 @@ public class ArticleService {
     public Article findArticleWithId(Long id) {
         return this.articleRepository.findArticleWithId(id);
     }
+
+    public List<Article> findArticlesWithDestinationName(String name) {
+        return this.articleRepository.findArticlesWithDestinationName(name);
+    }
+
+    public String removeArticle(Article article) {
+        return this.articleRepository.removeArticle(article);
+    }
+
+    public Article updateArticle(Article article) {
+        return this.articleRepository.updateArticle(article);
+    }
+
+    public int incrementVisits(Article article) {
+        return this.articleRepository.incrementVisits(article);
+    }
 }
