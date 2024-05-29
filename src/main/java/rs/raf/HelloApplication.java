@@ -3,6 +3,7 @@ package rs.raf;
 import org.glassfish.hk2.utilities.binding.AbstractBinder;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.server.ServerProperties;
+import rs.raf.filters.AuthFilter;
 import rs.raf.repositories.activity.ActivityRepository;
 import rs.raf.repositories.activity.MySqlActivityRepository;
 import rs.raf.repositories.article.ArticleRepository;
@@ -51,5 +52,7 @@ public class HelloApplication extends ResourceConfig {
 
         // Ucitavamo resurse
         packages("rs.raf.resources");
+        register(AuthFilter.class);
+
     }
 }

@@ -6,6 +6,7 @@ import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
 import org.apache.commons.codec.digest.DigestUtils;
 import rs.raf.entities.User;
+import rs.raf.entities.UserType;
 import rs.raf.repositories.user.UserRepository;
 import rs.raf.request.UserForChangeRequest;
 
@@ -73,14 +74,11 @@ public class UserService {
         DecodedJWT jwt = verifier.verify(token);
 
         String email = jwt.getSubject();
-//        jwt.getClaim("role").asString();
-
+        int roleOrdinal = jwt.getClaim("user_type").asInt();
+        UserType role = UserType.values()[roleOrdinal];
+        System.out.println("Role: " + role + " Email: " + email);
         User user = this.userRepository.findUser(email);
 
-        if (user == null){
-            return false;
-        }
-
-        return true;
+        return user != null && role == UserType.ADMIN;
     }
 }
