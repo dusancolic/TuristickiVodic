@@ -68,7 +68,7 @@ public class UserService {
         return this.userRepository.changeUserData(userForChangeRequest);
     }
 
-    public boolean isAuthorized(String token){
+    public boolean isAuthorized(String token, Boolean adminRequired){
         Algorithm algorithm = Algorithm.HMAC256("secret");
         JWTVerifier verifier = JWT.require(algorithm).build();
         DecodedJWT jwt = verifier.verify(token);
@@ -79,6 +79,9 @@ public class UserService {
         System.out.println("Role: " + role + " Email: " + email);
         User user = this.userRepository.findUser(email);
 
-        return user != null && role == UserType.ADMIN;
+        if (adminRequired) {
+            return user != null && role == UserType.ADMIN;
+        }
+        return user != null;
     }
 }

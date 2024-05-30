@@ -49,10 +49,10 @@ public class HelloApplication extends ResourceConfig {
             }
         };
         register(binder);
-
+        register(AuthFilter.class);
         // Ucitavamo resurse
         packages("rs.raf.resources");
-        register(AuthFilter.class);
+
 
     }
 }
