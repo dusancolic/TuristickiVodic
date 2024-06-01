@@ -10,6 +10,8 @@ public interface DestinationRepository {
     Destination addDestination(Destination destination);
     Destination findDestination(String name);
 
+    Destination findDestinationById(Long id);
+
     List<Destination> allDestinations();
 
     String removeDestination(Destination destination);

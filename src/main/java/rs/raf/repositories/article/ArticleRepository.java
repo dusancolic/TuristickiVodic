@@ -15,5 +15,5 @@ public interface ArticleRepository {
 
      int incrementVisits(Article article);
      Article updateArticle(Article article);
-     List<Article> allArticles();
+     List<Article> allArticles(String filter);
 }

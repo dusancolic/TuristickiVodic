@@ -20,6 +20,9 @@ public class DestinationService {
             return this.destinationRepository.findDestination(name);
         }
 
+        public Destination findDestinationById(Long id) {
+            return this.destinationRepository.findDestinationById(id);
+        }
         public Destination addDestination(Destination destination) {
             return this.destinationRepository.addDestination(destination);
         }

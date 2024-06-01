@@ -231,35 +231,42 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
     }
 
     @Override
-    public List<Article> allArticles() {
+    public List<Article> allArticles(String filter) {
         List<Article> articles = new ArrayList<>();
+
+        String query;
+        if (filter.equals("mostVisited")) {
+            query = "SELECT * FROM articles WHERE date >= date_sub(now(),interval 1 month) ORDER BY number_of_visits DESC";
+        } else if (filter.equals("mostRecent")) {
+            query = "SELECT * FROM articles ORDER BY date DESC LIMIT 10";
+        } else {
+            query = "SELECT * FROM articles ORDER BY date DESC";
+        }
 
         try (Connection connection = this.newConnection();
              Statement statement = connection.createStatement();
-             ResultSet resultSet = statement.executeQuery("SELECT * FROM articles ORDER BY date DESC")) {
+             ResultSet resultSet = statement.executeQuery(query)) {
 
             while (resultSet.next()) {
+                List<Long> activities = new ArrayList<>();
                 try (Statement activityStatement = connection.createStatement();
                      ResultSet activityResultSet = activityStatement.executeQuery("SELECT activity_id FROM articles_activities WHERE article_id = " + resultSet.getLong("id"))) {
 
-                    List<Long> activities = new ArrayList<>();
                     while (activityResultSet.next()) {
                         activities.add(activityResultSet.getLong("activity_id"));
                     }
-
-                    articles.add(new Article(
-                            resultSet.getLong("id"),
-                            resultSet.getLong("destination_id"),
-                            resultSet.getString("title"),
-                            resultSet.getString("text"),
-                            resultSet.getString("author"),
-                            resultSet.getString("date"),
-                            resultSet.getInt("number_of_visits"),
-                            activities
-                    ));
                 }
+                articles.add(new Article(
+                        resultSet.getLong("id"),
+                        resultSet.getLong("destination_id"),
+                        resultSet.getString("title"),
+                        resultSet.getString("text"),
+                        resultSet.getString("author"),
+                        resultSet.getString("date"),
+                        resultSet.getInt("number_of_visits"),
+                        activities
+                ));
             }
-
         } catch (SQLException e) {
             e.printStackTrace();
         }

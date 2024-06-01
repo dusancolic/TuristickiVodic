@@ -49,7 +49,12 @@ public class DestinationResource {
         }
         return Response.ok(destinationService.removeDestination(destination)).build();
     }
-
+    @GET
+    @Path("/id/{id}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response find(@PathParam("id") Long id) {
+        return Response.ok(this.destinationService.findDestinationById(id)).build();
+    }
     @PUT
     @Produces(MediaType.APPLICATION_JSON)
     public Response update(@Valid Destination destination) {

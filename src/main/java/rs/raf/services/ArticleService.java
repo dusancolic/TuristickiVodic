@@ -19,8 +19,8 @@ public class ArticleService {
         return this.articleRepository.addArticle(article);
     }
 
-    public List<Article> allArticles() {
-        return this.articleRepository.allArticles();
+    public List<Article> allArticles(String filter) {
+        return this.articleRepository.allArticles(filter);
     }
 
     public Article findArticleWithId(Long id) {

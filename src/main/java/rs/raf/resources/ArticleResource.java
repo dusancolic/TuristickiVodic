@@ -17,8 +17,8 @@ public class ArticleResource {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response all() {
-        return Response.ok(this.articleService.allArticles()).build();
+    public Response all(String filter) {
+        return Response.ok(this.articleService.allArticles("all")).build();
     }
 
     @GET
@@ -58,6 +58,21 @@ public class ArticleResource {
     public Response findByDestinationName(@PathParam("name") String name) {
         return Response.ok(this.articleService.findArticlesWithDestinationName(name)).build();
     }
+
+    @GET
+    @Path("/most-visited")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response mostVisited(String filter) {
+        return Response.ok(this.articleService.allArticles("mostVisited")).build();
+    }
+
+    @GET
+    @Path("/most-recent")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response mostRecent(String filter) {
+        return Response.ok(this.articleService.allArticles("mostRecent")).build();
+    }
+
 
     @PUT
     @Path("/visit/{id}")

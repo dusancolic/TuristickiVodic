@@ -75,6 +75,40 @@ public class MySqlDestinationRepository extends MySqlAbstractRepository implemen
     }
 
     @Override
+    public Destination findDestinationById(Long id) {
+        Destination destination = null;
+
+        Connection connection = null;
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
+        try {
+            connection = this.newConnection();
+
+            preparedStatement = connection.prepareStatement("SELECT * FROM destinations where id = ?");
+            preparedStatement.setLong(1, id);
+            resultSet = preparedStatement.executeQuery();
+
+            if(resultSet.next()) {
+                String name = resultSet.getString("name");
+                String description = resultSet.getString("description");
+                destination = new Destination(id, name, description);
+            }
+
+            resultSet.close();
+            preparedStatement.close();
+            connection.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(preparedStatement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return destination;
+    }
+
+    @Override
     public List<Destination> allDestinations() {
         List<Destination> destinations = new ArrayList<>();
 
