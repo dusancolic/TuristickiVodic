@@ -2,7 +2,6 @@
 package rs.raf.filters;
 
 
-import rs.raf.resources.SubjectResource;
 import rs.raf.resources.UserResource;
 import rs.raf.services.UserService;
 

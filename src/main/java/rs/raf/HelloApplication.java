@@ -12,8 +12,6 @@ import rs.raf.repositories.comment.CommentRepository;
 import rs.raf.repositories.comment.MySqlCommentRepository;
 import rs.raf.repositories.destination.DestinationRepository;
 import rs.raf.repositories.destination.MySqlDestinationRepository;
-import rs.raf.repositories.subject.InMemorySubjectRepository;
-import rs.raf.repositories.subject.SubjectRepository;
 import rs.raf.repositories.user.MySqlUserRepository;
 import rs.raf.repositories.user.UserRepository;
 import rs.raf.services.*;
@@ -36,10 +34,8 @@ public class HelloApplication extends ResourceConfig {
                 this.bind(MySqlActivityRepository.class).to(ActivityRepository.class).in(Singleton.class);
                 this.bind(MySqlCommentRepository.class).to(CommentRepository.class).in(Singleton.class);
                 this.bind(MySqlDestinationRepository.class).to(DestinationRepository.class).in(Singleton.class);
-                this.bind(InMemorySubjectRepository.class).to(SubjectRepository.class).in(Singleton.class);
                 this.bind(MySqlArticleRepository.class).to(ArticleRepository.class).in(Singleton.class);
 
-                this.bindAsContract(SubjectService.class);
                 this.bindAsContract(UserService.class);
                 this.bindAsContract(ActivityService.class);
                 this.bindAsContract(CommentService.class);
