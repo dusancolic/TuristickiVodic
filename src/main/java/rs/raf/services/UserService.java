@@ -58,9 +58,14 @@ public class UserService {
         return this.userRepository.changeActivityForUser(email);
     }
 
-    public List<User> allUsers()
+    public List<User> allUsers(int page, int size)
     {
-        return this.userRepository.allUsers();
+        return this.userRepository.allUsers(page,size);
+    }
+
+    public long countUsers()
+    {
+        return this.userRepository.countUsers();
     }
 
     public User changeUserData(UserForChangeRequest userForChangeRequest)

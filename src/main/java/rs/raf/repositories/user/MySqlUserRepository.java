@@ -118,17 +118,21 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
     }
 
     @Override
-    public List<User> allUsers() {
+    public List<User> allUsers(int page, int size) {
         List<User> users = new ArrayList<>();
 
         Connection connection = null;
-        Statement statement = null;
+        PreparedStatement statement = null;
         ResultSet resultSet = null;
         try {
             connection = this.newConnection();
 
-            statement = connection.createStatement();
-            resultSet = statement.executeQuery("select * from users");
+            String query = "SELECT * FROM users LIMIT ? OFFSET ?";
+            statement = connection.prepareStatement(query);
+            statement.setInt(1, size);
+            statement.setInt(2, (page - 1) * size);
+            resultSet = statement.executeQuery();
+
             while (resultSet.next()) {
                 users.add(new User(resultSet.getLong("id"),
                         resultSet.getString("name"),
@@ -136,8 +140,7 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
                         resultSet.getString("email"),
                         resultSet.getString("password"),
                         UserType.valueOf(resultSet.getString("user_type").toUpperCase()),
-                        resultSet.getBoolean("active")))
-                        ;
+                        resultSet.getBoolean("active")));
             }
 
         } catch (Exception e) {
@@ -149,6 +152,33 @@ public class MySqlUserRepository extends MySqlAbstractRepository implements User
         }
 
         return users;
+    }
+
+    @Override
+    public long countUsers() {
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        long count = 0;
+
+        try {
+            connection = this.newConnection();
+            statement = connection.createStatement();
+            resultSet = statement.executeQuery("SELECT COUNT(*) FROM users");
+
+            if (resultSet.next()) {
+                count = resultSet.getLong(1);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        } finally {
+            this.closeStatement(statement);
+            this.closeResultSet(resultSet);
+            this.closeConnection(connection);
+        }
+
+        return count;
     }
 
     @Override
