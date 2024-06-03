@@ -1,5 +1,6 @@
 package rs.raf.repositories.article;
 
+import rs.raf.entities.Activity;
 import rs.raf.entities.Article;
 import rs.raf.repositories.MySqlAbstractRepository;
 
@@ -271,6 +272,47 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
             e.printStackTrace();
         }
 
+        return articles;
+    }
+
+    @Override
+    public List<Article> findArticlesWithActivityId(Long id) {
+        List<Article> articles = new ArrayList<>();
+
+        String articleQuery = "SELECT a.id, a.destination_id, a.title, a.text, a.author, a.date, a.number_of_visits " +
+                "FROM articles a JOIN articles_activities aa ON a.id = aa.article_id WHERE aa.activity_id = ?";
+        String activityQuery = "SELECT activity_id FROM articles_activities WHERE article_id = ?";
+
+        try (Connection connection = this.newConnection();
+             PreparedStatement articleStatement = connection.prepareStatement(articleQuery))
+        {
+            articleStatement.setLong(1, id);
+
+            try (ResultSet resultSet = articleStatement.executeQuery()) {
+                while (resultSet.next()) {
+                    Long id1 = resultSet.getLong("id");
+                    Long destinationId = resultSet.getLong("destination_id");
+                    String title = resultSet.getString("title");
+                    String text = resultSet.getString("text");
+                    String author = resultSet.getString("author");
+                    String date = resultSet.getString("date");
+                    int numberOfVisits = resultSet.getInt("number_of_visits");
+
+                    List<Long> activities = new ArrayList<>();
+                    try (PreparedStatement activityStatement = connection.prepareStatement(activityQuery)) {
+                        activityStatement.setLong(1, id1);
+                        try (ResultSet activityResultSet = activityStatement.executeQuery()) {
+                            while (activityResultSet.next()) {
+                                activities.add(activityResultSet.getLong("activity_id"));
+                            }
+                        }
+                    }
+                    articles.add(new Article(id1, destinationId, title, text, author, date, numberOfVisits, activities));
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
         return articles;
     }
 }

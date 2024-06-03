@@ -19,6 +19,10 @@ public class ArticleService {
         return this.articleRepository.addArticle(article);
     }
 
+    public List<Article> findArticlesWithActivityId(Long id) {
+        return this.articleRepository.findArticlesWithActivityId(id);
+    }
+
     public List<Article> allArticles(String filter) {
         return this.articleRepository.allArticles(filter);
     }

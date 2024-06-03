@@ -82,4 +82,11 @@ public class ArticleResource {
         return Response.ok(this.articleService.incrementVisits(article)).build();
     }
 
+    @GET
+    @Path("/activity/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response allArticlesWithActivityId(@PathParam("id") Long id) {
+        System.out.println("id");
+        return Response.ok(this.articleService.findArticlesWithActivityId(id)).build();
+    }
 }

@@ -1,6 +1,5 @@
 package rs.raf.resources;
 
-import rs.raf.entities.Article;
 import rs.raf.entities.Comment;
 import rs.raf.services.CommentService;
 
@@ -35,4 +34,10 @@ public class CommentResource {
         return Response.ok(this.commentService.addComment(comment)).build();
     }
 
+    @GET
+    @Path("/article/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public Response findCommentsWithArticleId(@PathParam("id") Long id) {
+        return Response.ok(this.commentService.findCommentsWithArticleId(id)).build();
+    }
 }

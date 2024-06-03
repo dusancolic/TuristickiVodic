@@ -41,4 +41,5 @@ public class ActivityResource {
         return Response.ok(this.activityService.addActivity(activity)).build();
     }
 
+
 }
