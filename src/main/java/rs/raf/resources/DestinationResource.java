@@ -9,6 +9,9 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Path("/destinations")
 public class DestinationResource {
@@ -18,8 +21,15 @@ public class DestinationResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response all() {
-        return Response.ok(this.destinationService.allDestinations()).build();
+    public Response all(@QueryParam("page") @DefaultValue("1") int page, @QueryParam("size")@DefaultValue("50") int size) {
+        List<Destination> destinations = this.destinationService.allDestinations(page, size);
+        long count = this.destinationService.countDestinations();
+        Map<String, Object> response = new HashMap<>();
+        response.put("destinations", destinations);
+        response.put("totalDestinations", count);
+        response.put("currentPage", page);
+        response.put("totalPages", (int) Math.ceil((double) count / size));
+        return Response.ok(response).build();
     }
 
     @GET

@@ -19,22 +19,33 @@ public class ArticleService {
         return this.articleRepository.addArticle(article);
     }
 
-    public List<Article> findArticlesWithActivityId(Long id) {
-        return this.articleRepository.findArticlesWithActivityId(id);
+    public List<Article> findArticlesWithActivityId(Long id,int page, int size) {
+        return this.articleRepository.findArticlesWithActivityId(id,page,size);
     }
 
-    public List<Article> allArticles(String filter) {
-        return this.articleRepository.allArticles(filter);
+    public long countArticles(String filter) {
+        return this.articleRepository.countArticles(filter);
+    }
+
+    public long countArticlesWithActivityId(Long id) {
+        return this.articleRepository.countArticlesWithActivityId(id);
+    }
+
+    public List<Article> allArticles(String filter, int page, int size) {
+        return this.articleRepository.allArticles(filter, page, size);
     }
 
     public Article findArticleWithId(Long id) {
         return this.articleRepository.findArticleWithId(id);
     }
 
-    public List<Article> findArticlesWithDestinationName(String name) {
-        return this.articleRepository.findArticlesWithDestinationName(name);
+    public List<Article> findArticlesWithDestinationName(String name, int page, int size) {
+        return this.articleRepository.findArticlesWithDestinationName(name,page,size);
     }
 
+    public long countArticlesWithDestinationName(String name) {
+        return this.articleRepository.countArticlesWithDestinationName(name);
+    }
     public String removeArticle(Article article) {
         return this.articleRepository.removeArticle(article);
     }

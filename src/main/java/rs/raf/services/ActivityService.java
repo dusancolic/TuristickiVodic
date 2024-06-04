@@ -24,4 +24,5 @@ public class ActivityService {
         System.out.println("allActivities");
         return this.activityRepository.allActivities();
     }
+
 }

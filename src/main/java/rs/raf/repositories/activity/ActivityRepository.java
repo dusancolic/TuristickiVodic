@@ -9,4 +9,5 @@ public interface ActivityRepository {
     Activity addActivity(Activity activity);
     Activity findActivity(String name);
     List<Activity> allActivities();
+
 }

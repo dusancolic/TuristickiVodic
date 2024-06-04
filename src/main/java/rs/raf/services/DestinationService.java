@@ -12,8 +12,12 @@ public class DestinationService {
        @Inject
         private DestinationRepository destinationRepository;
 
-        public List<Destination> allDestinations() {
-            return this.destinationRepository.allDestinations();
+        public List<Destination> allDestinations(int page, int size) {
+            return this.destinationRepository.allDestinations(page,size);
+        }
+
+        public long countDestinations() {
+            return this.destinationRepository.countDestinations();
         }
 
         public Destination findDestination(String name) {

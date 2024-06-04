@@ -123,4 +123,6 @@ public class MySqlActivityRepository extends MySqlAbstractRepository implements 
 
         return activities;
     }
+
+
 }

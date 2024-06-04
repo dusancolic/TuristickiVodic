@@ -1,6 +1,5 @@
 package rs.raf.repositories.article;
 
-import rs.raf.entities.Activity;
 import rs.raf.entities.Article;
 import rs.raf.repositories.MySqlAbstractRepository;
 
@@ -109,17 +108,20 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
     }
 
     @Override
-    public List<Article> findArticlesWithDestinationName(String name) {
+    public List<Article> findArticlesWithDestinationName(String name, int page, int size) {
         List<Article> articles = new ArrayList<>();
 
         String articleQuery = "SELECT a.id, a.destination_id, a.title, a.text, a.author, a.date, a.number_of_visits " +
-                "FROM articles a JOIN destinations d ON a.destination_id = d.id WHERE d.name = ?";
+                "FROM articles a JOIN destinations d ON a.destination_id = d.id WHERE d.name = ? LIMIT ? OFFSET ?";
         String activityQuery = "SELECT activity_id FROM articles_activities WHERE article_id = ?";
 
         try (Connection connection = this.newConnection();
              PreparedStatement articleStatement = connection.prepareStatement(articleQuery))
         {
+
             articleStatement.setString(1, name);
+            articleStatement.setInt(2, size);
+            articleStatement.setInt(3, (page - 1) * size);
 
             try (ResultSet resultSet = articleStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -231,17 +233,20 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
         return article;
     }
 
+
+
     @Override
-    public List<Article> allArticles(String filter) {
+    public List<Article> allArticles(String filter, int page, int size) {
         List<Article> articles = new ArrayList<>();
 
+        int limit = page*size>10?10-(page-1)*size:size;
         String query;
         if (filter.equals("mostVisited")) {
-            query = "SELECT * FROM articles WHERE date >= date_sub(now(),interval 1 month) ORDER BY number_of_visits DESC";
+            query = "SELECT * FROM articles WHERE date >= date_sub(now(),interval 1 month) ORDER BY number_of_visits DESC LIMIT " + limit + " OFFSET " + (page - 1) * size ;
         } else if (filter.equals("mostRecent")) {
-            query = "SELECT * FROM articles ORDER BY date DESC LIMIT 10";
+            query = "SELECT * FROM articles ORDER BY date DESC LIMIT " + limit + " OFFSET " + (page - 1) * size;
         } else {
-            query = "SELECT * FROM articles ORDER BY date DESC";
+            query = "SELECT * FROM articles ORDER BY date DESC LIMIT " + size + " OFFSET " + (page - 1) * size;
         }
 
         try (Connection connection = this.newConnection();
@@ -276,17 +281,19 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
     }
 
     @Override
-    public List<Article> findArticlesWithActivityId(Long id) {
+    public List<Article> findArticlesWithActivityId(Long id, int page, int size) {
         List<Article> articles = new ArrayList<>();
 
         String articleQuery = "SELECT a.id, a.destination_id, a.title, a.text, a.author, a.date, a.number_of_visits " +
-                "FROM articles a JOIN articles_activities aa ON a.id = aa.article_id WHERE aa.activity_id = ?";
+                "FROM articles a JOIN articles_activities aa ON a.id = aa.article_id WHERE aa.activity_id = ? LIMIT ? OFFSET ?";
         String activityQuery = "SELECT activity_id FROM articles_activities WHERE article_id = ?";
 
         try (Connection connection = this.newConnection();
              PreparedStatement articleStatement = connection.prepareStatement(articleQuery))
         {
             articleStatement.setLong(1, id);
+            articleStatement.setInt(2, size);
+            articleStatement.setInt(3, (page - 1) * size);
 
             try (ResultSet resultSet = articleStatement.executeQuery()) {
                 while (resultSet.next()) {
@@ -314,5 +321,72 @@ public class MySqlArticleRepository extends MySqlAbstractRepository implements A
             e.printStackTrace();
         }
         return articles;
+    }
+
+    @Override
+    public long countArticles(String filter) {
+        String query;
+        if (filter.equals("mostVisited")) {
+            query = "SELECT COUNT(*) FROM articles WHERE date >= date_sub(now(),interval 1 month) ORDER BY number_of_visits DESC LIMIT 10";
+        } else if (filter.equals("mostRecent")) {
+            query = "SELECT COUNT(*) FROM articles ORDER BY date DESC LIMIT 10";
+        } else {
+            query = "SELECT COUNT(*) FROM articles ";
+        }
+
+        try (Connection connection = this.newConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+
+            if (resultSet.next()) {
+                return resultSet.getLong(1);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    @Override
+    public long countArticlesWithDestinationName(String name) {
+
+        String query = "SELECT COUNT(*) FROM articles a JOIN destinations d ON a.destination_id = d.id WHERE d.name = ?";
+
+        try (Connection connection = this.newConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setString(1, name);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getLong(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
+    }
+
+    @Override
+    public long countArticlesWithActivityId(Long id) {
+
+        String query = "SELECT COUNT(*) FROM articles_activities WHERE activity_id = ?";
+
+        try (Connection connection = this.newConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(query)) {
+
+            preparedStatement.setLong(1, id);
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                if (resultSet.next()) {
+                    return resultSet.getLong(1);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return 0;
     }
 }

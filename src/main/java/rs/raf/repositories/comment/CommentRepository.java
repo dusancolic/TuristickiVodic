@@ -10,7 +10,9 @@ public interface CommentRepository {
 
     Comment findCommentWithId(Long id);
 
-    List<Comment> findCommentsWithArticleId(Long id);
+    List<Comment> findCommentsWithArticleId(Long id, int page, int size);
+
+    long countCommentsWithArticleId(Long id);
 
     List<Comment> allComments();
 }

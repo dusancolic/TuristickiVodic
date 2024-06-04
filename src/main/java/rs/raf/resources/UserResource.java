@@ -22,7 +22,7 @@ public class UserResource {
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
-    public Response all(@QueryParam("page") @DefaultValue("1") int page,@QueryParam("size") @DefaultValue("1") int size) {
+    public Response all(@QueryParam("page") @DefaultValue("1") int page,@QueryParam("size") @DefaultValue("10") int size) {
         List<User> users = this.userService.allUsers(page, size);
         long count = this.userService.countUsers();
         Map<String, Object> response = new HashMap<>();

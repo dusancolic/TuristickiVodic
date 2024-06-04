@@ -8,6 +8,9 @@ import javax.validation.Valid;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Path("/articles")
 public class ArticleResource {
@@ -17,8 +20,16 @@ public class ArticleResource {
 
     @GET
     @Produces({MediaType.APPLICATION_JSON})
-    public Response all(String filter) {
-        return Response.ok(this.articleService.allArticles("all")).build();
+    public Response all(@QueryParam("page") @DefaultValue("1") int page, @QueryParam("size")@DefaultValue("50") int size) {
+        List<Article> articles = this.articleService.allArticles("all", page, size);
+        long count = this.articleService.countArticles("all");
+
+        Map<String, Object> response = new HashMap<>();
+        response.put("articles", articles);
+        response.put("totalArticles", count);
+        response.put("currentPage", page);
+        response.put("totalPages", (int) Math.ceil((double) count / size));
+        return Response.ok(response).build();
     }
 
     @GET
@@ -55,22 +66,47 @@ public class ArticleResource {
     @GET
     @Path("/destination/{name}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response findByDestinationName(@PathParam("name") String name) {
-        return Response.ok(this.articleService.findArticlesWithDestinationName(name)).build();
+    public Response findByDestinationName(@PathParam("name") String name,@QueryParam("page") @DefaultValue("1") int page, @QueryParam("size")@DefaultValue("50") int size) {
+        List<Article> articles = this.articleService.findArticlesWithDestinationName(name, page, size);
+        long count = this.articleService.countArticlesWithDestinationName(name);
+        Map<String, Object> response = new HashMap<>();
+        response.put("articles", articles);
+        response.put("totalArticles", count);
+        response.put("currentPage", page);
+        response.put("totalPages", (int) Math.ceil((double) count / size));
+        return Response.ok(response).build();
     }
 
     @GET
     @Path("/most-visited")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response mostVisited(String filter) {
-        return Response.ok(this.articleService.allArticles("mostVisited")).build();
+    public Response mostVisited(@QueryParam("page") @DefaultValue("1") int page, @QueryParam("size")@DefaultValue("50") int size) {
+        List<Article> articles = this.articleService.allArticles("mostVisited", page, size);
+        long count = this.articleService.countArticles("mostVisited");
+        if(count > 10)
+            count = 10;
+        Map<String, Object> response = new HashMap<>();
+        response.put("articles", articles);
+        response.put("totalArticles", count);
+        response.put("currentPage", page);
+        response.put("totalPages", (int) Math.ceil((double) count / size));
+        return Response.ok(response).build();
     }
 
     @GET
     @Path("/most-recent")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response mostRecent(String filter) {
-        return Response.ok(this.articleService.allArticles("mostRecent")).build();
+    public Response mostRecent(@QueryParam("page") @DefaultValue("1") int page, @QueryParam("size")@DefaultValue("50") int size) {
+        List<Article> articles = this.articleService.allArticles("mostRecent", page, size);
+        long count = this.articleService.countArticles("mostRecent");
+        if(count > 10)
+            count = 10;
+        Map<String, Object> response = new HashMap<>();
+        response.put("articles", articles);
+        response.put("totalArticles", count);
+        response.put("currentPage", page);
+        response.put("totalPages", (int) Math.ceil((double) count / size));
+        return Response.ok(response).build();
     }
 
 
@@ -85,8 +121,14 @@ public class ArticleResource {
     @GET
     @Path("/activity/{id}")
     @Produces({MediaType.APPLICATION_JSON})
-    public Response allArticlesWithActivityId(@PathParam("id") Long id) {
-        System.out.println("id");
-        return Response.ok(this.articleService.findArticlesWithActivityId(id)).build();
+    public Response allArticlesWithActivityId(@PathParam("id") Long id, @QueryParam("page") @DefaultValue("1") int page, @QueryParam("size")@DefaultValue("50") int size) {
+        List<Article> articles = this.articleService.findArticlesWithActivityId(id, page, size);
+        long count = this.articleService.countArticlesWithActivityId(id);
+        Map<String, Object> response = new HashMap<>();
+        response.put("articles", articles);
+        response.put("totalArticles", count);
+        response.put("currentPage", page);
+        response.put("totalPages", (int) Math.ceil((double) count / size));
+        return Response.ok(response).build();
     }
 }

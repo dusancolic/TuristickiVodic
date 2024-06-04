@@ -12,7 +12,8 @@ public interface DestinationRepository {
 
     Destination findDestinationById(Long id);
 
-    List<Destination> allDestinations();
+    List<Destination> allDestinations(int page, int size);
+    long countDestinations();
 
     String removeDestination(Destination destination);
     Destination updateDestination(Destination destination);
